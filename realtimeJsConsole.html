@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Custom JS Console</title>
+<style>
+	body {
+		background-color:black;
+		color:rgb(0 255 0);
+	}
+	#editor {
+		width: 100%;
+      		min-height: 200px;
+     		border: 1px solid rgb(0 255 0);
+      		font-family: "Courier New", monospace;
+      		font-size: 12px;
+		outline:white;
+
+    	}
+
+    	#output {
+     		width: 100%;
+      		min-height: 100px;
+	        border: 1px solid rgb(0 255 0);
+		font-family:monospace;
+    	}
+</style>
+</head>
+<body>
+  <h1 style = 'font-family:monospace;'>My JS Html Console</h1>
+  <h style = 'font-family: monospace;'><b>JS Code Editor:</b></h>
+  <div id="editor" contenteditable="true"></div>
+  <button onclick="runCode()" style='float:right;'>Run Code</button>
+  <form>
+    <input type="text" id="filename" placeholder="myJsCode.html">
+    <button type="button" id="saveButton">Save as .html</button>
+  </form>
+
+  <br/>
+  <h style = 'font-family:monospace;'><b>JS Console:</b></h>
+  <div id="output"></div>
+
+  <script>
+    function runCode() {
+    // Clear the output div first
+    document.getElementById("output").textContent = "";
+
+    const code = document.getElementById("editor").innerText;
+    
+    // Create a new function scope to isolate the execution
+    const isolatedFunction = new Function(code);
+
+    // Redirect console.log to display in the output div
+    const originalLog = console.log;
+    console.log = function(message) {
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerText += message + "\n";
+    };
+
+    // Execute the code inside the isolated function
+    try {
+        isolatedFunction();
+    } catch (error) {
+        console.log("Error:", error.message);
+    } finally {
+        // Restore original console.log
+        console.log = originalLog;
+    }
+}
+
+
+//Save button
+document.getElementById("saveButton").addEventListener("click", function() {
+      saveAsHtml();
+    });
+
+    function saveAsHtml() {
+      const htmlContent = document.documentElement.outerHTML;
+      const fileName = document.getElementById("filename").value || "myJsCode.html";
+      const blob = new Blob([htmlContent], { type: "text/html" });
+
+      const anchor = document.createElement("a");
+      anchor.download = fileName;
+      anchor.href = URL.createObjectURL(blob);
+      anchor.click();
+
+      URL.revokeObjectURL(anchor.href); // Clean up the object URL
+    }
+
+  </script>
+</body>
+</html>

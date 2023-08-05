@@ -1,0 +1,11 @@
+<h1 style='color:mediumpurple; font-family: fantasy'>raymondcjyi's JS Console in HTML</h1>
+<i><p style='color:mediumpurple; font-family:fantasy'> Programs output here>>> </p></i>
+<div id='JS-console-output' style='border:1px solid mediumpurple;'></div>
+<style>body{background-color:#000;color:mediumpurple;font-family: monospace}</style>
+<script>
+console.log=function(msg)
+{
+document.getElementById('JS-console-output').innerText+=msg+'\n'
+}
+console.log('***Code from here:')
+</script>
