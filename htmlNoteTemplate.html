@@ -1,0 +1,33 @@
+<head>
+    <title>HTML Note Template</title>
+    <style>
+        body{background-color: #000; color: #fff; }
+        #input{
+            background-color: #000;color:rgb(0 255 0);
+        }
+        #input:focus{
+            outline:none;
+            border:2px solid rgb(0 255 0) ;
+        }
+        ul a{
+            color:#fff
+        }
+    </style>
+</head>
+<body>
+    <div id="output"></div>
+    <textarea id="input" rows = 8 cols= 88 oninput="renderHTML()"placeholder="Write notes in html format here.."></textarea>
+    <button onclick = renderHTML()>Render</button>
+    <p><i>*Info: </i><b>Ctrl + S</b> to save note locally</p>
+
+
+    <script>
+        document.getElementById('input').value = document.getElementById('output').innerHTML
+        renderHTML()
+        function renderHTML() {
+        const htmlInput = document.getElementById("input").value;
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = htmlInput;
+    }
+    </script>
+</body>
