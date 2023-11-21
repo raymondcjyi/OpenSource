@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Timer with Rest and Snooze</title>
+</head>
+<body>
+
+  <h1>Timer</h1>
+  <p id="timer">Press 'Start Timer' to begin</p>
+  <button onclick="startTimer()">Start Timer</button>
+  <button onclick="rest()">Rest</button>
+  <button onclick="snooze()">Snooze</button>
+
+  <script>
+    let timeInSeconds = 1320; // Change this to set the initial time in seconds
+    let timer;
+    let ringing = false;
+
+	let context = new (window.AudioContext || window.webkitAudioContext)();
+    let oscillator;
+
+    function startTimer() {
+      ringing = false;
+      clearInterval(timer);
+      timer = setInterval(() => {
+        document.getElementById('timer').innerHTML = `Time left: ${timeInSeconds} seconds`;
+        timeInSeconds--;
+
+        if (timeInSeconds < 0 && !ringing) {
+          clearInterval(timer);
+          ring();
+        }
+      }, 1000);
+    }
+
+    function ring() {
+      document.getElementById('timer').innerHTML = 'Ring!';
+
+      // Keep ringing until Rest or Snooze is clicked
+      ringing = true;
+	playSound();
+    }
+
+    function rest() {
+      if (ringing) {
+        clearInterval(timer);
+        timeInSeconds = 1320 ; // Change this to set the desired time in seconds
+        startTimer();
+        ringing = false;
+	stopSound();
+	
+      }
+    }
+
+    function snooze() {
+      if (ringing) {
+        clearInterval(timer);
+        timeInSeconds = 300; // Snooze for 5 minutes (300 seconds)
+        startTimer();
+        ringing = false;
+	stopSound();
+      }
+    }
+
+	function playSound() {
+      oscillator = context.createOscillator();
+      oscillator.type = 'sine'; // Change the type for different sound
+      oscillator.frequency.setValueAtTime(500, context.currentTime); // Set the frequency
+      oscillator.connect(context.destination);
+      oscillator.start();
+
+      document.getElementById('timer').innerHTML = 'Ring!';
+
+      // Keep ringing until Rest or Snooze is clicked
+      ringing = true;
+    }
+
+    function stopSound() {
+      if (oscillator) {
+        oscillator.stop();
+        ringing = false;
+      }
+    }
+  </script>
+
+</body>
+</html>
